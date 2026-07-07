@@ -1,0 +1,5 @@
+node_modules/
+.gethookd/
+swipe-file.md
+teardown.md
+.DS_Store
