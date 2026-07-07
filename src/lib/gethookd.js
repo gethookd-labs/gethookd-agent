@@ -9,7 +9,7 @@ export async function fetchAds({ apiKey, query, perPage = 50, page = 1, language
     headers: {
       'Authorization': `Bearer ${apiKey}`,
       'Accept': 'application/json',
-      'User-Agent': 'gethookd-agent/0.1.3'
+      'User-Agent': 'gethookd-agent/0.1.4'
     }
   });
   if (!res.ok) {

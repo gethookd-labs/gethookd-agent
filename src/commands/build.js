@@ -9,7 +9,9 @@ export async function build(opts) {
   const cfg = loadConfig();
   const query = opts.query || cfg.niche || 'supplements';
   const perPage = Number(opts.limit || 50);
-  const language = opts.lang === 'all' ? null : (opts.lang || 'en');
+  // priority: --lang flag > config.language > 'en' default
+  const langChoice = opts.lang ?? cfg.language ?? 'en';
+  const language = (langChoice === 'all') ? null : langChoice;
   const spinner = ora(`pulling ${language || 'all-language'} ads for ${chalk.cyan(query)} from gethookd.ai...`).start();
   try {
     const { ads, meta } = await fetchAds({ apiKey: cfg.apiKey, query, perPage, language });
