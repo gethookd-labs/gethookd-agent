@@ -9,13 +9,15 @@ export async function build(opts) {
   const cfg = loadConfig();
   const query = opts.query || cfg.niche || 'supplements';
   const perPage = Number(opts.limit || 50);
-  // priority: --lang flag > config.language > 'en' default
   const langChoice = opts.lang ?? cfg.language ?? 'en';
   const language = (langChoice === 'all') ? null : langChoice;
   const spinner = ora(`pulling ${language || 'all-language'} ads for ${chalk.cyan(query)} from gethookd.ai...`).start();
   try {
-    const { ads, meta } = await fetchAds({ apiKey: cfg.apiKey, query, perPage, language });
-    spinner.succeed(`pulled ${ads.length} of ${meta.total ?? '?'} ads matching "${query}"`);
+    const { ads, meta, dropped } = await fetchAds({ apiKey: cfg.apiKey, query, perPage, language });
+    const msg = language && dropped
+      ? `pulled ${ads.length} ${language.toUpperCase()} ads (dropped ${dropped} non-${language.toUpperCase()} from the API results)`
+      : `pulled ${ads.length} of ${meta.total ?? '?'} ads matching "${query}"`;
+    spinner.succeed(msg);
     const md = renderSwipeFile({ query, ads, meta, language });
     fs.writeFileSync(opts.out, md);
     console.log(chalk.green(`\n✓ swipe file written to ${opts.out}`));

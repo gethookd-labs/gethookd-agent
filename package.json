@@ -1,6 +1,6 @@
 {
   "name": "gethookd-agent",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "open-source ad research agent — mines 6M+ proven ads and outputs a viral swipe file",
   "bin": { "gethookd-agent": "./src/cli.js" },
   "type": "module",
@@ -15,7 +15,8 @@
     "chalk": "^5.3.0",
     "ora": "^8.0.0",
     "prompts": "^2.4.2",
-    "node-fetch": "^3.3.2"
+    "node-fetch": "^3.3.2",
+    "franc-min": "^6.2.0"
   },
   "engines": { "node": ">=18" }
 }

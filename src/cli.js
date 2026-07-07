@@ -11,7 +11,7 @@ const program = new Command();
 program
   .name('gethookd-agent')
   .description('mines 6M+ proven ads and outputs a viral swipe file for your brand')
-  .version('0.1.4');
+  .version('0.1.5');
 
 program.command('init').description('one-time setup: api key, niche, defaults').action(init);
 program.command('build')
