@@ -15,10 +15,8 @@ program
 
 program.command('init').description('one-time setup: api key, niche, defaults').action(init);
 program.command('build')
-  .description('build a swipe file for a niche')
-  .option('--niche <niche>', 'niche filter')
-  .option('--min-perf <n>', 'minimum performance score', '70')
-  .option('--days-active <n>', 'minimum days active', '7')
+  .description('build a swipe file for a search query (niche, product, angle, brand)')
+  .option('--query <q>', 'search term (e.g. "supplements", "collagen", "gut health")')
   .option('--limit <n>', 'max ads to pull', '50')
   .option('--out <path>', 'output path', './swipe-file.md')
   .action(build);

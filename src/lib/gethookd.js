@@ -1,9 +1,20 @@
 import fetch from 'node-fetch';
-const BASE = 'https://api.gethookd.ai/v1';
-export async function fetchAds({ apiKey, niche, minPerf, daysActive, limit }) {
-  const url = `${BASE}/ads/search?niche=${encodeURIComponent(niche)}&min_perf=${minPerf}&days_active=${daysActive}&limit=${limit}`;
-  const res = await fetch(url, { headers: { 'Authorization': `Bearer ${apiKey}`, 'User-Agent': 'gethookd-agent/0.1.0' } });
-  if (!res.ok) { throw new Error(`gethookd api ${res.status}: ${await res.text()}`); }
-  const j = await res.json();
-  return j.ads || j.results || [];
+const BASE = 'https://app.gethookd.ai/api/v1';
+
+export async function fetchAds({ apiKey, query, limit = 50 }) {
+  const url = `${BASE}/explore?query=${encodeURIComponent(query)}&limit=${limit}`;
+  const res = await fetch(url, {
+    headers: {
+      'Authorization': `Bearer ${apiKey}`,
+      'Accept': 'application/json',
+      'User-Agent': 'gethookd-agent/0.1.1'
+    }
+  });
+  if (!res.ok) {
+    const body = await res.text();
+    throw new Error(`gethookd api ${res.status}: ${body.slice(0, 200)}`);
+  }
+  const json = await res.json();
+  if (json.errors) throw new Error(`gethookd api error: ${json.message || 'unknown'}`);
+  return json.data || [];
 }

@@ -1,16 +1,22 @@
-export function renderSwipeFile({ niche, ads }) {
+export function renderSwipeFile({ query, ads }) {
   const lines = [];
-  lines.push(`# Swipe File: ${niche}`);
+  lines.push(`# Swipe File: ${query}`);
   lines.push('');
   lines.push(`_${ads.length} proven ads pulled from gethookd.ai_`);
   lines.push('');
   for (const [i, ad] of ads.entries()) {
-    lines.push(`## ${i+1}. ${ad.brand || 'Unknown'} — perf ${ad.perf_score ?? '?'}`);
+    const brand = ad.brand_name || ad.brand || ad.page_name || 'Unknown';
+    const perf = ad.performance_score ?? ad.perf_score ?? '?';
+    lines.push(`## ${i+1}. ${brand} — perf ${perf}`);
     lines.push('');
-    if (ad.hook) lines.push(`**Hook:** ${ad.hook}`);
-    if (ad.copy) lines.push(`\n**Copy:**\n> ${ad.copy.split('\n').join('\n> ')}`);
-    if (ad.cta) lines.push(`\n**CTA:** ${ad.cta}`);
-    if (ad.link) lines.push(`\n[view on gethookd](${ad.link})`);
+    const hook = ad.hook || ad.headline || (ad.body_text || '').split('\n')[0];
+    if (hook) lines.push(`**Hook:** ${hook}`);
+    const copy = ad.body_text || ad.copy || ad.text;
+    if (copy) lines.push(`\n**Copy:**\n> ${String(copy).split('\n').join('\n> ')}`);
+    const cta = ad.cta || ad.call_to_action;
+    if (cta) lines.push(`\n**CTA:** ${cta}`);
+    const link = ad.share_url || ad.link || ad.url;
+    if (link) lines.push(`\n[view on gethookd](${link})`);
     lines.push('\n---\n');
   }
   return lines.join('\n');

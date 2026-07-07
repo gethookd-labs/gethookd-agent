@@ -1,20 +1,19 @@
 # gethookd-agent
 
-**mines 6M+ proven ads and hands you a viral swipe file for your brand to steal**
+**mines proven ecommerce ads from any niche and hands you a viral swipe file for your brand to steal**
 
-built by [@gethookdai](https://x.com/gethookdai). feed it your product + landing page + niche, 90 seconds later you've got a markdown swipe file of ads that already printed millions in your category.
+built by [@gethookdai](https://x.com/gethookdai). feed it a search query, 90 seconds later you've got a markdown swipe file of ads that already printed millions in your category.
 
 ## what it does
 
-- pulls live ad data from the 6M+ ad [gethookd.ai](https://gethookd.ai) database (no scraping, no cookies, no captchas)
-- filters by niche, performance score, days active, copy length, video length
+- pulls live ad data from the [gethookd.ai](https://gethookd.ai) database (6M+ indexed ads, no scraping, no cookies, no captchas)
+- searches by niche, product, angle, or brand name
 - extracts hooks, angles, offers, CTAs, testimonials from every ad
-- vision-classifies thumbnails (UGC vs CGI, podcast format, shock/gross)
 - outputs one clean `swipe-file.md` — drop into Claude/GPT and generate new ad scripts instantly
 - ships as an MCP server so Claude Code, Cursor, and Hermes drive it natively
-- runs 100% local, one command, your own free gethookd api key
+- runs 100% local, one command, your own API key
 
-no more $300/mo spytool subscriptions. no more copy-pasting from ad libraries. no more scraping breaking every 3 weeks.
+cheaper than any single spytool subscription. no more copy-pasting from ad libraries. no more scraping that breaks every 3 weeks.
 
 ## install
 
@@ -22,24 +21,19 @@ no more $300/mo spytool subscriptions. no more copy-pasting from ad libraries. n
 npx -y gethookd-agent init
 ```
 
-that's it. wizard walks you through:
-1. paste your gethookd api key (free — sign up at [gethookd.ai](https://gethookd.ai))
-2. pick a niche (supplements, beauty, skincare, pets, kids, longevity, ...)
-3. optional: paste your product page URL for competitive context
+wizard walks you through:
+1. paste your gethookd api key (grab from your account at [gethookd.ai](https://gethookd.ai))
+2. default search query (supplements, beauty, skincare, pets, etc.)
 
 output lands at `./swipe-file.md`.
 
 ## use it
 
 ```bash
-# build a swipe file for a niche
-gethookd-agent build --niche supplements --min-perf 80 --days-active 7
-
-# competitive teardown against your product page
-gethookd-agent teardown --url https://trybello.com/products/glow
-
-# grep the swipe cache for a hook you half-remember
-gethookd-agent search "pricing power"
+# build a swipe file for any query
+gethookd-agent build --query "gut health"
+gethookd-agent build --query "collagen" --limit 100
+gethookd-agent build --query "AG1" --out ag1-teardown.md
 ```
 
 ## use with claude code / cursor / hermes (MCP)
@@ -58,15 +52,15 @@ then add to your MCP config:
 }
 ```
 
-trigger phrases: `build a swipe file for [niche]`, `teardown this landing page`, `pull viral ads for [product]`.
+trigger phrases: `build a swipe file for [query]`, `pull viral ads for [product]`, `teardown [brand name]`.
 
-## why open source
+## pricing
 
-we run [gethookd.ai](https://gethookd.ai) — the ad research SaaS with 6M+ ads indexed across 15+ niches. this CLI is the agent surface on top of that DB. free to use with a free api key. paid tier unlocks bigger daily quotas, video downloads, and multi-account board sync.
+this CLI is free and open source (MIT). the [gethookd.ai](https://gethookd.ai) API requires a paid plan — starts at $79/mo with a **7-day free trial**. cheaper than any single ad spytool subscription. see [gethookd.ai/api/](https://www.gethookd.ai/api/) for full API reference.
 
 ## license
 
-MIT
+MIT — do whatever you want.
 
 ## credits
 
