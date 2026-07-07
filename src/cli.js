@@ -11,13 +11,14 @@ const program = new Command();
 program
   .name('gethookd-agent')
   .description('mines 6M+ proven ads and outputs a viral swipe file for your brand')
-  .version('0.1.2');
+  .version('0.1.3');
 
 program.command('init').description('one-time setup: api key, niche, defaults').action(init);
 program.command('build')
   .description('build a swipe file for a search query (niche, product, angle, brand)')
   .option('--query <q>', 'search term (e.g. "supplements", "collagen", "gut health")')
   .option('--limit <n>', 'max ads to pull', '50')
+  .option('--lang <code>', 'language filter (en, es, de, nl, ... or "all")', 'en')
   .option('--out <path>', 'output path', './swipe-file.md')
   .action(build);
 program.command('teardown')

@@ -1,13 +1,15 @@
 import fetch from 'node-fetch';
 const BASE = 'https://app.gethookd.ai/api/v1';
 
-export async function fetchAds({ apiKey, query, perPage = 50, page = 1 }) {
-  const url = `${BASE}/explore?query=${encodeURIComponent(query)}&per_page=${perPage}&page=${page}`;
+export async function fetchAds({ apiKey, query, perPage = 50, page = 1, language = 'en' }) {
+  const params = new URLSearchParams({ query, per_page: String(perPage), page: String(page) });
+  if (language) params.set('language', language);
+  const url = `${BASE}/explore?${params.toString()}`;
   const res = await fetch(url, {
     headers: {
       'Authorization': `Bearer ${apiKey}`,
       'Accept': 'application/json',
-      'User-Agent': 'gethookd-agent/0.1.2'
+      'User-Agent': 'gethookd-agent/0.1.3'
     }
   });
   if (!res.ok) {

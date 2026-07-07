@@ -9,11 +9,12 @@ export async function build(opts) {
   const cfg = loadConfig();
   const query = opts.query || cfg.niche || 'supplements';
   const perPage = Number(opts.limit || 50);
-  const spinner = ora(`pulling ads for ${chalk.cyan(query)} from gethookd.ai...`).start();
+  const language = opts.lang === 'all' ? null : (opts.lang || 'en');
+  const spinner = ora(`pulling ${language || 'all-language'} ads for ${chalk.cyan(query)} from gethookd.ai...`).start();
   try {
-    const { ads, meta } = await fetchAds({ apiKey: cfg.apiKey, query, perPage });
+    const { ads, meta } = await fetchAds({ apiKey: cfg.apiKey, query, perPage, language });
     spinner.succeed(`pulled ${ads.length} of ${meta.total ?? '?'} ads matching "${query}"`);
-    const md = renderSwipeFile({ query, ads, meta });
+    const md = renderSwipeFile({ query, ads, meta, language });
     fs.writeFileSync(opts.out, md);
     console.log(chalk.green(`\n✓ swipe file written to ${opts.out}`));
     console.log('drop into claude: ' + chalk.dim(`"read ${opts.out} and write 10 new ad scripts using these proven hooks"`));
