@@ -1,22 +1,26 @@
-export function renderSwipeFile({ query, ads }) {
+export function renderSwipeFile({ query, ads, meta = {} }) {
   const lines = [];
   lines.push(`# Swipe File: ${query}`);
   lines.push('');
-  lines.push(`_${ads.length} proven ads pulled from gethookd.ai_`);
+  const total = meta.total ? ` of ${meta.total.toLocaleString()} matching in the gethookd DB` : '';
+  lines.push(`_${ads.length} proven ads${total} — pulled from gethookd.ai_`);
   lines.push('');
   for (const [i, ad] of ads.entries()) {
-    const brand = ad.brand_name || ad.brand || ad.page_name || 'Unknown';
-    const perf = ad.performance_score ?? ad.perf_score ?? '?';
-    lines.push(`## ${i+1}. ${brand} — perf ${perf}`);
+    const brand = ad.brand?.name?.trim() || 'Unknown Brand';
+    const perf = ad.performance_score ?? '?';
+    const perfLabel = ad.performance_score_title ? ` (${ad.performance_score_title})` : '';
+    const daysActive = ad.days_active ? ` · ${ad.days_active}d active` : '';
+    const format = ad.display_format ? ` · ${ad.display_format}` : '';
+    lines.push(`## ${i + 1}. ${brand} — perf ${perf}${perfLabel}${daysActive}${format}`);
     lines.push('');
-    const hook = ad.hook || ad.headline || (ad.body_text || '').split('\n')[0];
-    if (hook) lines.push(`**Hook:** ${hook}`);
-    const copy = ad.body_text || ad.copy || ad.text;
-    if (copy) lines.push(`\n**Copy:**\n> ${String(copy).split('\n').join('\n> ')}`);
-    const cta = ad.cta || ad.call_to_action;
-    if (cta) lines.push(`\n**CTA:** ${cta}`);
-    const link = ad.share_url || ad.link || ad.url;
-    if (link) lines.push(`\n[view on gethookd](${link})`);
+    if (ad.title) lines.push(`**Hook:** ${ad.title}`);
+    if (ad.body) {
+      const body = String(ad.body).trim().split('\n').join('\n> ');
+      lines.push(`\n**Copy:**\n> ${body}`);
+    }
+    if (ad.cta_text) lines.push(`\n**CTA:** ${ad.cta_text}${ad.cta_type ? ` (${ad.cta_type})` : ''}`);
+    if (ad.landing_page) lines.push(`**Landing:** ${ad.landing_page}`);
+    if (ad.share_url) lines.push(`\n[view on gethookd](${ad.share_url})`);
     lines.push('\n---\n');
   }
   return lines.join('\n');
